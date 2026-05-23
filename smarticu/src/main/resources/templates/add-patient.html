@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Add Patient</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial,sans-serif;
+            background:#eef2ff;
+        }
+
+        .navbar{
+            background:#0f172a;
+            color:white;
+            padding:20px;
+            text-align:center;
+            font-size:30px;
+            font-weight:bold;
+        }
+
+        .container{
+            width:500px;
+            margin:50px auto;
+            background:white;
+            padding:40px;
+            border-radius:20px;
+            box-shadow:0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .heading{
+            font-size:32px;
+            margin-bottom:30px;
+            color:#0f172a;
+            text-align:center;
+        }
+
+        input{
+            width:100%;
+            padding:15px;
+            margin-top:15px;
+            border-radius:10px;
+            border:1px solid #ccc;
+            font-size:16px;
+        }
+
+        select{
+            width:100%;
+            padding:15px;
+            margin-top:15px;
+            border-radius:10px;
+            border:1px solid #ccc;
+            font-size:16px;
+        }
+
+        button{
+            width:100%;
+            padding:15px;
+            margin-top:25px;
+            border:none;
+            background:#2563eb;
+            color:white;
+            font-size:18px;
+            border-radius:10px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#1e40af;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+    SmartICU Monitoring System
+</div>
+
+<div class="container">
+
+    <div class="heading">
+        Add ICU Patient
+    </div>
+
+    <form action="/savePatient" method="post">
+
+        <input type="text"
+               name="name"
+               placeholder="Enter Patient Name"
+               required>
+
+        <input type="number"
+               name="age"
+               placeholder="Enter Age"
+               required>
+
+        <input type="text"
+               name="disease"
+               placeholder="Enter Disease"
+               required>
+
+        <input type="number"
+               name="heartRate"
+               placeholder="Heart Rate"
+               required>
+
+        <input type="number"
+               name="oxygenLevel"
+               placeholder="Oxygen Level"
+               required>
+
+        <input type="text"
+               name="bloodPressure"
+               placeholder="Blood Pressure"
+               required>
+
+        <select name="status">
+
+            <option value="Stable">
+                Stable
+            </option>
+
+            <option value="Monitoring">
+                Monitoring
+            </option>
+
+            <option value="Critical">
+                Critical
+            </option>
+
+        </select>
+
+        <button type="submit">
+            Add Patient
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

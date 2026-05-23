@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>SmartICU Dashboard</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#eef2ff;
+            overflow-x:hidden;
+        }
+
+        #splash{
+            position:fixed;
+            width:100%;
+            height:100vh;
+            background:#0f172a;
+            color:white;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            flex-direction:column;
+            z-index:9999;
+            animation:fadeOut 1s ease forwards;
+            animation-delay:2s;
+        }
+
+        #splash h1{
+            font-size:60px;
+            letter-spacing:3px;
+            animation:pulse 1s infinite;
+        }
+
+        #splash p{
+            margin-top:15px;
+            font-size:20px;
+            color:#cbd5e1;
+        }
+
+        @keyframes pulse{
+            0%{
+                transform:scale(1);
+            }
+            50%{
+                transform:scale(1.05);
+            }
+            100%{
+                transform:scale(1);
+            }
+        }
+
+        @keyframes fadeOut{
+            to{
+                opacity:0;
+                visibility:hidden;
+            }
+        }
+
+        .navbar{
+            background:#0f172a;
+            color:white;
+            padding:20px;
+            font-size:30px;
+            font-weight:bold;
+            text-align:center;
+            letter-spacing:1px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .container{
+            padding:40px;
+        }
+
+        .top-section{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:40px;
+            flex-wrap:wrap;
+            gap:20px;
+        }
+
+        .heading{
+            font-size:38px;
+            color:#0f172a;
+            font-weight:bold;
+        }
+
+        .subheading{
+            color:gray;
+            margin-top:8px;
+        }
+
+        .stats{
+            display:flex;
+            gap:20px;
+            flex-wrap:wrap;
+        }
+
+        .stat-box{
+            background:white;
+            padding:20px;
+            border-radius:15px;
+            min-width:160px;
+            text-align:center;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number{
+            font-size:32px;
+            font-weight:bold;
+            color:#2563eb;
+        }
+
+        .stat-text{
+            margin-top:8px;
+            color:gray;
+        }
+
+        .form-section{
+            background:white;
+            padding:30px;
+            border-radius:20px;
+            margin-bottom:40px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .form-title{
+            font-size:28px;
+            margin-bottom:20px;
+            color:#0f172a;
+        }
+
+        .form-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:20px;
+        }
+
+        input{
+            padding:14px;
+            border-radius:10px;
+            border:1px solid #cbd5e1;
+            font-size:16px;
+        }
+
+        button{
+            background:#2563eb;
+            color:white;
+            border:none;
+            padding:14px;
+            border-radius:10px;
+            font-size:17px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#1d4ed8;
+        }
+
+        .card-container{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+            gap:30px;
+        }
+
+        .card{
+            background:white;
+            border-radius:20px;
+            padding:25px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.1);
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-8px);
+        }
+
+        .critical{
+            border-left:10px solid red;
+        }
+
+        .stable{
+            border-left:10px solid green;
+        }
+
+        .monitoring{
+            border-left:10px solid orange;
+        }
+
+        .patient-name{
+            font-size:28px;
+            font-weight:bold;
+            color:#2563eb;
+            margin-bottom:15px;
+        }
+
+        .info{
+            margin-top:12px;
+            font-size:18px;
+            color:#333;
+        }
+
+        .label{
+            font-weight:bold;
+            color:#111827;
+        }
+
+        .status{
+            margin-top:25px;
+            display:inline-block;
+            padding:10px 20px;
+            border-radius:30px;
+            font-weight:bold;
+            color:white;
+        }
+
+        .status-stable{
+            background:green;
+        }
+
+        .status-monitoring{
+            background:orange;
+        }
+
+        .status-critical{
+            background:red;
+        }
+
+        .action-buttons{
+            margin-top:20px;
+            display:flex;
+            gap:10px;
+        }
+
+        .delete-btn{
+            background:red;
+        }
+
+        .download-btn{
+            background:green;
+        }
+
+        .footer{
+            margin-top:60px;
+            text-align:center;
+            color:gray;
+            font-size:16px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="splash">
+
+    <h1>SmartICU</h1>
+
+    <p>AI Powered ICU Monitoring System</p>
+
+</div>
+
+<div class="navbar">
+    SmartICU Monitoring System
+</div>
+
+<div class="container">
+
+    <div class="top-section">
+
+        <div>
+
+            <div class="heading">
+                ICU Live Dashboard
+            </div>
+
+            <div class="subheading">
+                Real-time patient monitoring and AI powered ICU tracking
+            </div>
+
+        </div>
+
+        <div class="stats">
+
+            <div class="stat-box">
+
+                <div class="stat-number"
+                     th:text="${patients.size()}">
+                    0
+                </div>
+
+                <div class="stat-text">
+                    Total Patients
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="form-section">
+
+        <div class="form-title">
+            Add New Patient
+        </div>
+
+        <form action="/addPatient" method="post">
+
+            <div class="form-grid">
+
+                <input type="text"
+                       name="name"
+                       placeholder="Patient Name"
+                       required>
+
+                <input type="number"
+                       name="age"
+                       placeholder="Age"
+                       required>
+
+                <input type="text"
+                       name="disease"
+                       placeholder="Disease"
+                       required>
+
+                <input type="number"
+                       name="heartRate"
+                       placeholder="Heart Rate"
+                       required>
+
+                <input type="number"
+                       name="oxygenLevel"
+                       placeholder="Oxygen Level"
+                       required>
+
+                <input type="text"
+                       name="bloodPressure"
+                       placeholder="Blood Pressure"
+                       required>
+
+                <button type="submit">
+                    Add Patient
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="card-container">
+
+        <div th:each="patient : ${patients}"
+
+             th:class="'card ' +
+             (${patient.status} == 'Critical' ? 'critical' :
+             (${patient.status} == 'Monitoring' ? 'monitoring' : 'stable'))">
+
+            <div class="patient-name"
+                 th:text="${patient.name}">
+            </div>
+
+            <div class="info">
+                <span class="label">Age:</span>
+                <span th:text="${patient.age}"></span>
+            </div>
+
+            <div class="info">
+                <span class="label">Disease:</span>
+                <span th:text="${patient.disease}"></span>
+            </div>
+
+            <div class="info">
+                <span class="label">Heart Rate:</span>
+                <span th:text="${patient.heartRate}"></span> bpm
+            </div>
+
+            <div class="info">
+                <span class="label">Oxygen Level:</span>
+                <span th:text="${patient.oxygenLevel}"></span> %
+            </div>
+
+            <div class="info">
+                <span class="label">Blood Pressure:</span>
+                <span th:text="${patient.bloodPressure}"></span>
+            </div>
+
+            <div th:class="'status ' +
+                 (${patient.status} == 'Critical' ? 'status-critical' :
+                 (${patient.status} == 'Monitoring' ? 'status-monitoring' : 'status-stable'))"
+
+                 th:text="${patient.status}">
+            </div>
+
+            <div class="action-buttons">
+
+                <form th:action="@{/deletePatient/{id}(id=${patient.id})}"
+                      method="post">
+
+                    <button class="delete-btn" type="submit">
+                        Delete
+                    </button>
+
+                </form>
+
+                <a th:href="@{/download/{id}(id=${patient.id})}">
+
+                    <button class="download-btn" type="button">
+                        Download PDF
+                    </button>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        SmartICU © 2026 | AI Based ICU Monitoring System
+    </div>
+
+</div>
+
+</body>
+
+</html>
